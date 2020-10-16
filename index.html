@@ -45,6 +45,7 @@
           // routerBasename: '/',
           servers: {
             dicomWeb: [
+              /*
               {
                 "name": "dicomweb_server",
                 "wadoUriRoot": "http://localhost:5985",
@@ -57,7 +58,7 @@
                     "requestFromBrowser": true
                 }
               },
-              /*
+             */
               {
                 name: "DCM4CHEE",
                 wadoUriRoot:
@@ -70,7 +71,6 @@
                 imageRendering: "wadors",
                 thumbnailRendering: "wadors"
               }
-             */
             ],
           },
           extensions: [
@@ -113,6 +113,8 @@
             }
           ]
         };
+
+/*
       const googleOIDCConfig = [ {
         // ~ REQUIRED
         // Authorization Server URL
@@ -130,10 +132,10 @@
 
       viewerConfig.servers = { dicomWeb: [], };
       viewerConfig.oidc = googleOIDCConfig;
-
+*/
       window.OHIFViewer.installViewer(
         viewerConfig,
-        containerId, 
+        containerId,
         componentRenderedOrUpdatedCallback
       );
 
@@ -224,8 +226,13 @@
   ]
 }
 `
+
 var xhr = new XMLHttpRequest();
-xhr.open("POST", '/server', true);
+xhr.open("POST", postEndpoint, true);
+
+const state = window.store.getState();
+const accessToken = state.oidc.user.access_token;
+xhr.setRequestHeader("authorization", `Bearer ${accessToken}`);
 
 //Send the proper header information along with the request
 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -233,11 +240,14 @@ xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 xhr.onreadystatechange = function() { // Call a function when the state changes.
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         // Request finished. Do processing here.
+        console.log("request finished");
     }
 }
-xhr.send("foo=bar&lorem=ipsum");
-// xhr.send(new Int8Array()); 
+// xhr.send("foo=bar&lorem=ipsum");
+// xhr.send(new Int8Array());
 // xhr.send(document);
+xhr.send(launchTemplate);
+console.log("request sent");
 
     }
 
