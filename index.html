@@ -37,6 +37,8 @@
     ></script>
     <script>
 
+      const useGoogleOIDCConfig = True;
+
       var containerId = "root";
       var componentRenderedOrUpdatedCallback = function() {
         console.log("OHIF Viewer rendered/updated");
@@ -114,30 +116,31 @@
           ]
         };
 
-/*
-      const googleOIDCConfig = [ {
-        // ~ REQUIRED
-        // Authorization Server URL
-        authority: 'https://accounts.google.com',
-        client_id: '370953977065-o32uf5cn5f4bovtogdu862mlnhbcv9hk.apps.googleusercontent.com',
-        redirect_uri: '/callback.html', // `OHIFStandaloneViewer.js`
-        response_type: 'id_token token',
-        scope: 'email profile openid https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/cloud-healthcare', // email profile openid
-        // ~ OPTIONAL
-        post_logout_redirect_uri: '/logout-redirect.html',
-        revoke_uri: 'https://accounts.google.com/o/oauth2/revoke?token=',
-        automaticSilentRenew: true,
-        revokeAccessTokenOnSignout: true,
-      } ];
+      if (useGoogleOIDCConfig) {
+        const googleOIDCConfig = [ {
+          // ~ REQUIRED
+          // Authorization Server URL
+          authority: 'https://accounts.google.com',
+          client_id: '370953977065-o32uf5cn5f4bovtogdu862mlnhbcv9hk.apps.googleusercontent.com',
+          redirect_uri: '/callback.html', // `OHIFStandaloneViewer.js`
+          response_type: 'id_token token',
+          scope: 'email profile openid https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/cloud-healthcare', // email profile openid
+          // ~ OPTIONAL
+          post_logout_redirect_uri: '/logout-redirect.html',
+          revoke_uri: 'https://accounts.google.com/o/oauth2/revoke?token=',
+          automaticSilentRenew: true,
+          revokeAccessTokenOnSignout: true,
+        } ];
 
-      viewerConfig.servers = { dicomWeb: [], };
-      viewerConfig.oidc = googleOIDCConfig;
-*/
-      window.OHIFViewer.installViewer(
-        viewerConfig,
-        containerId,
-        componentRenderedOrUpdatedCallback
-      );
+        viewerConfig.servers = { dicomWeb: [], };
+        viewerConfig.oidc = googleOIDCConfig;
+
+        window.OHIFViewer.installViewer(
+          viewerConfig,
+          containerId,
+          componentRenderedOrUpdatedCallback
+        );
+      }
 
     function launchSlicer() {
 
